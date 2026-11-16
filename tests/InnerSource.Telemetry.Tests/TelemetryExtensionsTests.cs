@@ -46,12 +46,12 @@ public partial class TelemetryExtensionsTests
     [Fact]
     public async Task ExportsTracesMetricsAndLogsToTheConfiguredEndpoint()
     {
-        var exports = new ConcurrentBag<(string Path, string ApiKey)>();
+        var exports = new ConcurrentBag<(string Signal, string ApiKey)>();
         var receiverBuilder = CreateBuilder();
         await using var receiver = receiverBuilder.Build();
-        receiver.MapPost("/v1/{signal}", (HttpRequest request) =>
+        receiver.MapPost("/v1/{signal}", (string signal, HttpRequest request) =>
         {
-            exports.Add((request.Path.Value!, request.Headers["x-otlp-api-key"].ToString()));
+            exports.Add((signal, request.Headers["x-otlp-api-key"].ToString()));
             return Results.Ok();
         });
         await receiver.StartAsync(CancellationToken);
@@ -77,7 +77,7 @@ public partial class TelemetryExtensionsTests
             await app.StopAsync(CancellationToken);
         }
 
-        Assert.Equal(["/v1/logs", "/v1/metrics", "/v1/traces"], exports.Select(export => export.Path).Distinct().Order());
+        Assert.Equal(["logs", "metrics", "traces"], exports.Select(export => export.Signal).Distinct().Order());
         Assert.All(exports, export => Assert.Equal("test-key", export.ApiKey));
     }
 
