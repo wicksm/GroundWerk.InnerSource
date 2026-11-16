@@ -1,0 +1,31 @@
+# Pipeline innersource-ci: InnerSource's ci stage, from the template in
+# GroundWerk.PipelineTemplates at a release tag (CICD-1, CICD-3). It runs on each change to main,
+# on each version tag, and as main's PR build through the branch policy in GroundWerk's
+# infra/azdo/policies.tf. Each PR build pushes the packages to the innersource feed as
+# prereleases, and each version tag's build pushes that version (CICD-13, README.md). It has no
+# path filters, so that every version tag starts a build.
+trigger:
+  branches:
+    include:
+      - main
+  tags:
+    include:
+      - v*
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: GroundWerk.PipelineTemplates
+      ref: refs/tags/v1.1.0
+
+extends:
+  template: stages/ci.yml@templates
+  parameters:
+    # The dev container's image, as GroundWerk's pipeline build-image pushed it
+    image: crgroundwerk.azurecr.io/groundwerk-dev@sha256:b38e8df3c90ba23a0926b10b1ef0cf6014f32bca382b85804cd66f6faa7c746c
+    registryConnection: registry-pull
+    sonarConnection: sonarqube-cloud
+    sonarOrganization: mikewicks-lab
+    sonarProjectKey: mikewicks-lab_InnerSource
+    packageFeed: https://pkgs.dev.azure.com/mikewicks-lab/GroundWerk/_packaging/innersource/nuget/v3/index.json
