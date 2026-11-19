@@ -4,11 +4,11 @@ InnerSource holds the company-wide NuGet packages, the shared code that every te
 
 ## Packages
 
-- `InnerSource.Telemetry`: one call, `builder.AddTelemetry()`, sets up OpenTelemetry traces, metrics and structured logs for ASP.NET Core and HttpClient (OBS-1), and names the service after the application unless `OTEL_SERVICE_NAME` names it. When configuration sets `OTEL_EXPORTER_OTLP_ENDPOINT`, all three go there over OTLP, with the headers and protocol from the other standard `OTEL_` settings, which an Aspire AppHost sets for each project it starts. Requests to `/health` aren't traced, since probes call it every few seconds.
+- `GroundWerk.Telemetry`: one call, `builder.AddTelemetry()`, sets up OpenTelemetry traces, metrics and structured logs for ASP.NET Core and HttpClient (OBS-1), and names the service after the application unless `OTEL_SERVICE_NAME` names it. When configuration sets `OTEL_EXPORTER_OTLP_ENDPOINT`, all three go there over OTLP, with the headers and protocol from the other standard `OTEL_` settings, which an Aspire AppHost sets for each project it starts. Requests to `/health` aren't traced, since probes call it every few seconds.
 
 ## Using a package
 
-Add the feed to the consuming repo's nuget.config and map `InnerSource.*` to it, so these packages come only from the feed and every other package only from nuget.org. Name nuget.org as its only audit source too, so a restore reads the feed only for a package that isn't in the package cache yet:
+Add the feed to the consuming repo's nuget.config and map `GroundWerk.*` to it, so these packages come only from the feed and every other package only from nuget.org. Name nuget.org as its only audit source too, so a restore reads the feed only for a package that isn't in the package cache yet:
 
 ```xml
 <packageSources>
@@ -21,7 +21,7 @@ Add the feed to the consuming repo's nuget.config and map `InnerSource.*` to it,
     <package pattern="*" />
   </packageSource>
   <packageSource key="innersource">
-    <package pattern="InnerSource.*" />
+    <package pattern="GroundWerk.*" />
   </packageSource>
 </packageSourceMapping>
 <auditSources>

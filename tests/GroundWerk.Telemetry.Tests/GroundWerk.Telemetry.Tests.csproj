@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\InnerSource.Telemetry\InnerSource.Telemetry.csproj" />
+    <ProjectReference Include="..\..\src\GroundWerk.Telemetry\GroundWerk.Telemetry.csproj" />
   </ItemGroup>
 
 </Project>

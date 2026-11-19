@@ -16,7 +16,7 @@ using static SimpleExec.Command;
 // The paths below are from the repo root, wherever the script is started.
 Directory.SetCurrentDirectory((string)AppContext.GetData("EntryPointFileDirectoryPath")!);
 
-const string Solution = "InnerSource.slnx";
+const string Solution = "GroundWerk.InnerSource.slnx";
 const string Configuration = "Release";
 const string TestResults = "artifacts/test-results";
 const string Packages = "artifacts/packages";

@@ -4,9 +4,9 @@ How to work in InnerSource, for people and coding agents. A PR that changes a co
 
 ## Layout
 
-- `InnerSource.slnx` is the one solution. Add each new project to it with `dotnet sln InnerSource.slnx add`.
-- `src/InnerSource.<Name>`: one project per package, named after it, such as `src/InnerSource.Telemetry`. build.cs packs every project under src, so code that isn't a package doesn't go there, and each one packs the repo's README.md as its readme, as InnerSource.Telemetry's project file does.
-- `tests/InnerSource.<Name>.Tests`: each package's tests.
+- `GroundWerk.InnerSource.slnx` is the one solution. Add each new project to it with `dotnet sln GroundWerk.InnerSource.slnx add`.
+- `src/GroundWerk.<Name>`: one project per package, named after it, such as `src/GroundWerk.Telemetry`. build.cs packs every project under src, so code that isn't a package doesn't go there, and each one packs the repo's README.md as its readme, as GroundWerk.Telemetry's project file does.
+- `tests/GroundWerk.<Name>.Tests`: each package's tests.
 - `build.cs`: the build script, which .NET 10 runs as a file-based app. Its Bullseye targets restore, build, test and pack, so the pipeline's YAML only runs it. Its `#:package` lines carry no versions, since those live in Directory.Packages.props.
 - `pipelines/innersource-ci.yml`: pipeline innersource-ci, from the ci stage template in GroundWerk.PipelineTemplates at a release tag. Its definition, the innersource feed and main's PR build are in the GroundWerk repo's infra/azdo Terraform (docs/adr/0009 there).
 

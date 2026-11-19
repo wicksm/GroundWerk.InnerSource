@@ -6,7 +6,7 @@ using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 
-namespace InnerSource.Telemetry;
+namespace GroundWerk.Telemetry;
 
 /// <summary>
 /// Sets up OpenTelemetry the same way in every service, so changing where telemetry goes is a

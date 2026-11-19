@@ -11,7 +11,7 @@ using OpenTelemetry;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Trace;
 
-namespace InnerSource.Telemetry.Tests;
+namespace GroundWerk.Telemetry.Tests;
 
 public partial class TelemetryExtensionsTests
 {

@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/GroundWerk.Telemetry/GroundWerk.Telemetry.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/GroundWerk.Telemetry.Tests/GroundWerk.Telemetry.Tests.csproj" />
+  </Folder>
+</Solution>

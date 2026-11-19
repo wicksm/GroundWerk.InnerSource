@@ -1,8 +1,0 @@
-<Solution>
-  <Folder Name="/src/">
-    <Project Path="src/InnerSource.Telemetry/InnerSource.Telemetry.csproj" />
-  </Folder>
-  <Folder Name="/tests/">
-    <Project Path="tests/InnerSource.Telemetry.Tests/InnerSource.Telemetry.Tests.csproj" />
-  </Folder>
-</Solution>
