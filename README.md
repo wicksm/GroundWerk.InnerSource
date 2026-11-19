@@ -37,7 +37,7 @@ A pipeline that extends the ci template in GroundWerk.PipelineTemplates signs in
 Versions come from git tags through MinVer and follow semantic versioning: a new major version for a change that can break a caller, such as a removed or renamed public member, a minor version for a new feature, and a patch for a fix.
 
 - Each PR build pushes its packages to the feed as prereleases named for the PR and the run, such as `1.0.1-pr.12.345.1`, so a consumer can try a change before it merges.
-- To release, tag the PR's merge commit on main with the next version and push the tag, such as `git tag -a v1.1.0 -m "v1.1.0: what changed"` and `git push origin v1.1.0`. The tag's build pushes that version to the feed.
+- To release, tag the PR's merge commit on main with the next version and push the tag, such as `git tag -a v1.1.0 -m "v1.1.0: what changed"` and `git push origin v1.1.0`. The tag's build pushes that version to the feed only if the tag is on main, so a tag on any other commit, such as your branch's last commit, fails its build and pushes nothing.
 - A version can't be replaced once it's in the feed, so never move or delete a tag, and fix a bad release with the next patch.
 - Once a version is in the feed, Renovate opens a PR in each repo that uses the package to move it there. To make every repo move past a version, such as one with a security flaw, add the package, the version to reach and a deadline to GroundWerk's infra/azdo/minimum-versions.tf through a PR. A build that uses an older version then warns until the deadline and fails from that day on, in UTC.
 
