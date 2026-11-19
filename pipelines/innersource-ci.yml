@@ -17,7 +17,7 @@ resources:
     - repository: templates
       type: git
       name: GroundWerk.PipelineTemplates
-      ref: refs/tags/v1.2.0
+      ref: refs/tags/v1.3.0
 
 extends:
   template: stages/ci.yml@templates
