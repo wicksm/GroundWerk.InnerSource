@@ -18,12 +18,19 @@ resources:
       type: git
       name: GroundWerk.PipelineTemplates
       ref: refs/tags/v1.3.0
+    # This environment's names, from the private Settings repo that the azdo Terraform writes
+    - repository: settings
+      type: git
+      name: Settings
+
+variables:
+  - template: variables.yml@settings
 
 extends:
   template: stages/ci.yml@templates
   parameters:
     # The dev container's image, as GroundWerk's pipeline build-image pushed it
-    image: crgroundwerk.azurecr.io/groundwerk-dev@sha256:b38e8df3c90ba23a0926b10b1ef0cf6014f32bca382b85804cd66f6faa7c746c
+    image: ${{ variables.registry }}/build-image@sha256:a0121079b79cd4ae8c4027d84d5bfe588c54dae56ece14bb200a1e0dddd274f7
     registryConnection: registry-pull
     sonarConnection: sonarqube-cloud
     sonarOrganization: mikewicks-lab
