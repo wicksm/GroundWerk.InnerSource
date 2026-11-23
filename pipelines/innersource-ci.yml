@@ -17,7 +17,7 @@ resources:
     - repository: templates
       type: git
       name: GroundWerk.PipelineTemplates
-      ref: refs/tags/v1.3.0
+      ref: refs/tags/v1.3.1
     # This environment's names, from the private Settings repo that the azdo Terraform writes
     - repository: settings
       type: git
