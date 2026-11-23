@@ -1,6 +1,6 @@
 # AGENTS.md
 
-How to work in InnerSource, for people and coding agents. A PR that changes a convention changes this file too. Work items, their board states and the Definitions of Done and Ready are project GroundWerk's, in the GroundWerk repo's AGENTS.md and on the wiki page Definitions of Done and Ready.
+How to work in GroundWerk.InnerSource, for people and coding agents. A PR that changes a convention changes this file too. Work items, their board states and the Definitions of Done and Ready are the project's, in the GroundWerk repo's AGENTS.md and on the wiki page Definitions of Done and Ready.
 
 ## Layout
 

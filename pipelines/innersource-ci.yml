@@ -1,4 +1,4 @@
-# Pipeline innersource-ci: InnerSource's ci stage, from the template in
+# Pipeline innersource-ci: GroundWerk.InnerSource's ci stage, from the template in
 # GroundWerk.PipelineTemplates at a release tag (CICD-1, CICD-3). It runs on each change to main,
 # on each version tag, and as main's PR build through the branch policy in GroundWerk's
 # infra/azdo/policies.tf. Each PR build pushes the packages to the innersource feed as
@@ -35,4 +35,7 @@ extends:
     sonarConnection: sonarqube-cloud
     sonarOrganization: mikewicks-lab
     sonarProjectKey: mikewicks-lab_InnerSource
+    # GroundWerk.InnerSource is the project's name in SonarQube Cloud
+    sonarProperties: |
+      sonar.projectName=GroundWerk.InnerSource
     packageFeed: https://pkgs.dev.azure.com/mikewicks-lab/GroundWerk/_packaging/innersource/nuget/v3/index.json

@@ -11,7 +11,7 @@ using System.Xml.Linq;
 using static Bullseye.Targets;
 using static SimpleExec.Command;
 
-// InnerSource's build, run the same way on a dev machine and in a pipeline (CICD-2).
+// GroundWerk.InnerSource's build, run the same way on a dev machine and in a pipeline (CICD-2).
 // dotnet run build.cs runs every target. Name targets to run fewer: dotnet run build.cs -- test.
 // The paths below are from the repo root, wherever the script is started.
 Directory.SetCurrentDirectory((string)AppContext.GetData("EntryPointFileDirectoryPath")!);

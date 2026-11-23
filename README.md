@@ -1,6 +1,6 @@
-# InnerSource
+# GroundWerk.InnerSource
 
-InnerSource holds the company-wide NuGet packages, the shared code that every team's services use the same way: the OpenTelemetry setup first, and later the auth package and the fake token issuer for tests (CODE-11). Any team can change a package through a PR, and each version goes to the innersource feed in Azure Artifacts, so a service takes a change only by moving to a new version of the package, never through a project reference (CODE-3).
+GroundWerk.InnerSource holds the company-wide NuGet packages, the shared code that every team's services use the same way: the OpenTelemetry setup first, and later the auth package and the fake token issuer for tests (CODE-11). Any team can change a package through a PR, and each version goes to the innersource feed in Azure Artifacts, so a service takes a change only by moving to a new version of the package, never through a project reference (CODE-3).
 
 ## Packages
 
