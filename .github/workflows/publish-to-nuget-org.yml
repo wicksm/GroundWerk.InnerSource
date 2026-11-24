@@ -1,0 +1,112 @@
+# Workflow publish-to-nuget-org: publishes each release of the packages to nuget.org (CICD-13,
+# README.md). It runs only in this repo's copy on GitHub, which pipeline mirror-to-github in the
+# GroundWerk repo keeps in step with main and the version tags, so Azure DevOps never runs it. A
+# version tag that the mirror pushes starts it, and you can run it by hand on such a tag. Its build
+# job builds, tests and packs the tag's commit with build.cs. Its publish job, the only one that can
+# sign in to nuget.org, runs none of the repo's code: Trusted Publishing hands it a key that's valid
+# for an hour, so no key is stored here or renewed (docs/adr/0014 in the GroundWerk repo).
+name: publish-to-nuget-org
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  build:
+    name: Build, test and pack
+    # Only a version tag, so a run by hand from a branch builds and publishes nothing
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      # The whole history and its tags, since MinVer takes the version from the tags. No token is
+      # kept for later steps.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # A tag on any other commit, such as a branch's last commit after its PR's squash merge,
+      # publishes nothing
+      - name: Check the tag is on main
+        run: |
+          if git merge-base --is-ancestor HEAD refs/remotes/origin/main; then
+            echo "$GITHUB_REF_NAME is on main, so this run may publish it"
+          else
+            echo "::error::$GITHUB_REF_NAME is on commit $(git rev-parse --short HEAD), which isn't on main, so nothing was published"
+            exit 1
+          fi
+
+      # The SDK that global.json pins
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          global-json-file: global.json
+
+      # Each package links to this repo on GitHub and to the commit it was built from
+      - name: Build, test and pack with build.cs
+        run: dotnet run build.cs
+        env:
+          ContinuousIntegrationBuild: 'true'
+          PackageProjectUrl: ${{ github.server_url }}/${{ github.repository }}
+          PublishRepositoryUrl: 'true'
+          RepositoryType: git
+          RepositoryUrl: ${{ github.server_url }}/${{ github.repository }}
+
+      # A tag that isn't a version, such as v1 or v-next, publishes nothing, since MinVer would
+      # make a prerelease after the last release instead, and nuget.org keeps every version for good
+      - name: Check the packages have the tag's version
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::$GITHUB_REF_NAME isn't a version tag, so nothing was published"
+            exit 1
+          fi
+          for package in artifacts/packages/*.nupkg; do
+            if [[ "$(basename "$package")" != *".$version.nupkg" ]]; then
+              echo "::error::$(basename "$package") doesn't have tag $GITHUB_REF_NAME's version, so nothing was published"
+              exit 1
+            fi
+          done
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: packages
+          path: artifacts/packages/*.nupkg
+          if-no-files-found: error
+
+  publish:
+    name: Publish to nuget.org
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    # Its rules let only a version tag's run deploy, and nuget.org's Trusted Publishing policy hands
+    # a key only to a job in this environment of this workflow
+    environment: nuget-org
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: packages
+          path: packages
+
+      # Trades an OIDC token that GitHub issues to this job, as id-token: write allows, for a
+      # nuget.org key that's valid for an hour. NUGET_USER is the nuget.org account that made the
+      # policy, set as the environment's secret, so no file here names it.
+      - name: Sign in to nuget.org
+        id: login
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      # A version that's already on nuget.org is skipped, so a rerun passes
+      - name: Push the packages to nuget.org
+        run: dotnet nuget push "packages/*.nupkg" --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
+        env:
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}

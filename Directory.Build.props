@@ -10,5 +10,8 @@
   <PropertyGroup>
     <!-- MinVer reads version tags such as v1.2.0. -->
     <MinVerTagPrefix>v</MinVerTagPrefix>
+    <!-- Each package's license and authors, as LICENSE gives them -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>The GroundWerk authors</Authors>
   </PropertyGroup>
 </Project>

@@ -9,6 +9,7 @@ How to work in GroundWerk.InnerSource, for people and coding agents. A PR that c
 - `tests/GroundWerk.<Name>.Tests`: each package's tests.
 - `build.cs`: the build script, which .NET 10 runs as a file-based app. Its Bullseye targets restore, build, test and pack, so the pipeline's YAML only runs it. Its `#:package` lines carry no versions, since those live in Directory.Packages.props.
 - `pipelines/innersource-ci.yml`: pipeline innersource-ci, from the ci stage template in GroundWerk.PipelineTemplates at a release tag. Its definition, the innersource feed and main's PR build are in the GroundWerk repo's infra/azdo Terraform (docs/adr/0009 there).
+- `.github/workflows/publish-to-nuget-org.yml`: workflow publish-to-nuget-org, which runs only in this repo's copy on GitHub and publishes each version tag on main to nuget.org through Trusted Publishing (docs/adr/0014 in the GroundWerk repo).
 
 ## Build and test
 
@@ -39,4 +40,4 @@ How to work in GroundWerk.InnerSource, for people and coding agents. A PR that c
 - Title the PR `<Type> <ID>: <what it does>`, in sentence case, with no `#ID` and no period, and link it to its work item.
 - Complete it with a squash merge whose message is `Merged PR <N>: ` followed by the PR's title, and delete the branch. Completing a PR doesn't close its work item.
 - Every PR into main runs pipeline innersource-ci unless it changes only Markdown files: gitleaks scans each of its commits for secrets, then build.cs runs inside SonarQube Cloud's analysis, and a secret, a failing test or a failed quality gate fails it and blocks the PR. A passing run pushes the PR's packages to the innersource feed as prereleases. The scanner turns warnings-as-errors off, so build.cs must pass before the PR.
-- A PR needs an approval from someone other than its author and its last pusher, and its comments resolved. Coding agents never approve or vote on a PR, bypass a policy or run a pipeline, and push a version tag only when a person asks for that release.
+- A PR needs an approval from someone other than its author and its last pusher, and its comments resolved. Coding agents never approve or vote on a PR, bypass a policy or run a pipeline, and push a version tag only when a person asks for that release, since it also publishes that version to nuget.org for good.
