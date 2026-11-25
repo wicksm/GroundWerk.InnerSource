@@ -24,3 +24,11 @@ Versions come from git tags through MinVer and follow semantic versioning: a new
 ## Building
 
 `dotnet run build.cs` builds and tests the solution, then packs each project under src into artifacts/packages. Name targets to run fewer, such as `dotnet run build.cs -- test`. Pipeline innersource-ci runs it on each change to main, on each version tag and as main's PR build.
+
+## Part of GroundWerk
+
+GroundWerk.InnerSource is one of GroundWerk's three repos, with GroundWerk and GroundWerk.PipelineTemplates, and GroundWerk's README says what the kit is and how to start. The repos live in Azure DevOps, and this copy on GitHub is a read-only mirror of main and the tags (docs/adr/0013 in the GroundWerk repo), so a pull request opened on GitHub isn't merged.
+
+## License
+
+MIT, as LICENSE says.
